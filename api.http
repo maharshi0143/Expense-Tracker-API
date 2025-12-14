@@ -1,0 +1,102 @@
+@baseUrl = http://localhost:3000/expenses
+@contentType = application/json
+
+### -------------------------------------------------------
+### 1. HEALTH CHECK (Root)
+### -------------------------------------------------------
+GET http://localhost:3000/
+
+### -------------------------------------------------------
+### 2. CREATE EXPENSES (POST)
+### -------------------------------------------------------
+
+# Create Food Expense
+POST {{baseUrl}}
+Content-Type: {{contentType}}
+
+{
+  "amount": 150.00,
+  "category": "Food",
+  "description": "Team Lunch",
+  "date": "2025-12-10"
+}
+
+###
+
+# Create Transport Expense
+POST {{baseUrl}}
+Content-Type: {{contentType}}
+
+{
+  "amount": 45.50,
+  "category": "Transport",
+  "description": "Uber to Client",
+  "date": "2025-12-12"
+}
+
+###
+
+# Create Large Bill (For testing filters)
+POST {{baseUrl}}
+Content-Type: {{contentType}}
+
+{
+  "amount": 1200.00,
+  "category": "Bills",
+  "description": "Office Rent",
+  "date": "2025-11-01"
+}
+
+### -------------------------------------------------------
+### 3. READ (GET) & FILTERING
+### -------------------------------------------------------
+
+# Get ALL Expenses
+GET {{baseUrl}}
+
+###
+
+# Filter: Category = Food AND Min Amount = 100
+GET {{baseUrl}}?category=Food&min_amount=100
+
+###
+
+# Filter: Date Range (December Only)
+GET {{baseUrl}}?start_date=2025-12-01&end_date=2025-12-31
+
+###
+
+# Sort: Highest Amount First
+GET {{baseUrl}}?sort_by=amount&order=desc
+
+### -------------------------------------------------------
+### 4. AGGREGATION (SUMMARY)
+### -------------------------------------------------------
+
+# Summary by Category
+GET {{baseUrl}}/summary/by-category
+
+###
+
+# Monthly Summary
+GET {{baseUrl}}/summary/monthly
+
+### -------------------------------------------------------
+### 5. UPDATE & DELETE
+### -------------------------------------------------------
+
+# Update an Expense (Replace '1' with a real ID from your DB)
+PUT {{baseUrl}}/1
+Content-Type: {{contentType}}
+
+{
+  "amount": 200.00,
+  "category": "Food",
+  "description": "Team Lunch (Updated)",
+  "date": "2025-12-10"
+}
+
+###
+
+# Delete an Expense (Replace '1' with a real ID)
+DELETE {{baseUrl}}/1
